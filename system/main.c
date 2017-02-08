@@ -5,6 +5,8 @@
 
 #include<lab2.h>
 
+#define NSH
+
 process	main(void)
 {
 	kprintf("\nHello World!\n");
@@ -45,7 +47,34 @@ process	main(void)
     kprintf("before resuming app1: esp addr: 0x%08X, content: 0x%08X, saved ESP: 0x%08X\n", addr, cont, sav_esp);
     
     resume(app1_pid);
+    
+    sleep(1);
+    
+    kprintf("\ncreate 3 looper process\n");
+    pid32 looper1, looper2, looper3;
+    looper1 = create(looper, 512, 30, "looper1", 1, 100);
+    looper2 = create(looper, 512, 30, "looper2", 1, 200);
+    looper3 = create(looper, 512, 30, "looper3", 1, 300);
+    
+    kprintf("main\n");
+    resume(looper1);
+    kprintf("main\n");
+    resume(looper2);
+    kprintf("main\n");
+    resume(looper3);
+    sleepms(3);
+    
+    int i = 0;
+    for (i = 0; i < 10; i++) {
+        kprintf("MAIN\n");
+        sleepms(3);
+    }
+    
+    rcreate(stacksmashA, 1024, 10, "stacksmashA", 0);
+    rcreate(stacksmashV, 1024, 20, "stacksmashV", 0);
+    sleep(5);
 	
+#ifdef SH	
 	pid32 shell_pid = create(shell, 8192, 50, "shell", 1, CONSOLE);
 	resume(shell_pid);
 
@@ -58,6 +87,7 @@ process	main(void)
 		kprintf("\n\nMain process recreating shell\n\n");
 		resume(create(shell, 4096, 20, "shell", 1, CONSOLE));
 	}
+#endif
 	return OK;
 }
 

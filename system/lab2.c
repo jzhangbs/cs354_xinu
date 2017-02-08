@@ -29,3 +29,9 @@ int func1(int a) {
     return res;
 }
 
+void looper( int val ) {
+    int count = 1;
+    while (count < 20) {
+        kprintf("%d,%d\n",val,count++);
+    }
+}

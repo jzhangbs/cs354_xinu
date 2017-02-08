@@ -80,9 +80,9 @@ void	nulluser()
 
 	/* Create a process to execute function main() */
 
-	resume (
-	   create((void *)main, INITSTK, INITPRIO, "main", 0,
-           NULL));
+	//resume (
+	   rcreate((void *)main, INITSTK, INITPRIO, "main", 0,
+           NULL);//);
 
 	/* Become the Null process (i.e., guarantee that the CPU has	*/
 	/*  something to run when no other process is ready to execute)	*/

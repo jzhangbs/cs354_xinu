@@ -7,3 +7,6 @@ void printsegaddr();
 /* app1() & func1() decl for lab2 */
 char app1();
 int func1();
+void looper(int);
+void stacksmashA();
+void stacksmashV();
