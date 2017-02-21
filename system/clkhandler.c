@@ -10,13 +10,19 @@ void	clkhandler()
 {
 	static	uint32	count1000 = 1000;	/* Count to 1000 ms	*/
 
+	/* Increment tick counter */
+	if (clktimefine == 0xFFFFFFFF) clktimefine = 0;
+	else ++clktimefine;
+
+
 	/* Decrement the ms counter, and see if a second has passed */
 
 	if((--count1000) <= 0) {
 
 		/* One second has passed, so increment seconds count */
 
-		clktime++;
+		if (clktime == 0xFFFFFFFF) clktime = 0;
+		else clktime++;
 
 		/* Reset the local ms counter for the next second */
 
@@ -42,4 +48,9 @@ void	clkhandler()
 		preempt = QUANTUM;
 		resched();
 	}
+}
+
+uint32 timediff(uint32 s, uint32 t) {
+	if (s>t) return (0xFFFFFFFF-s) + (t);
+	else return t-s;
 }

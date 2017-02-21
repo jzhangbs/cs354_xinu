@@ -25,14 +25,14 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	ptold = &proctab[currpid];
 
 	if (ptold->prstate == PR_CURR) {  /* Process remains eligible */
-		if (ptold->prprio > firstkey(readylist)) {
+		if (ptold->prcpuused < firstkey(readylist)) {
 			return;
 		}
 
 		/* Old process will no longer remain current */
 
 		ptold->prstate = PR_READY;
-		insert(currpid, readylist, ptold->prprio);
+		insert(currpid, readylist, ptold->prcpuused);
 	}
 
 	/* Force context switch to highest priority ready process */
@@ -41,6 +41,14 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	ptnew = &proctab[currpid];
 	ptnew->prstate = PR_CURR;
 	preempt = QUANTUM;		/* Reset time slice for process	*/
+	
+	uint32 add_time = timediff(ptold->prctxswstart, clktimefine);
+	uint32 rest = 0xFFFFFFFE - ptold->prcpuused;
+	if (rest < add_time) ptold->prcpuused = 0xFFFFFFFE;
+	else ptold->prcpuused += add_time;
+	ptnew->prctxswstart = clktimefine;
+	
+	//kprintf("switch %x\n", currpid);
 	ctxsw(&ptold->prstkptr, &ptnew->prstkptr);
 
 	/* Old process returns here when resumed */

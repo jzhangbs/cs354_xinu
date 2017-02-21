@@ -31,7 +31,7 @@ int func1(int a) {
 
 void looper( int val ) {
     int count = 1;
-    while (count < 20) {
+    while (count < 30) {
         kprintf("%d,%d\n",val,count++);
     }
 }

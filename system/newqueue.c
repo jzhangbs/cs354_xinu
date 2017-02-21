@@ -22,9 +22,9 @@ qid16	newqueue(void)
 
 	queuetab[queuehead(q)].qnext = queuetail(q);
 	queuetab[queuehead(q)].qprev = EMPTY;
-	queuetab[queuehead(q)].qkey  = MAXKEY;
+	queuetab[queuehead(q)].qkey  = MINKEY;
 	queuetab[queuetail(q)].qnext = EMPTY;
 	queuetab[queuetail(q)].qprev = queuehead(q);
-	queuetab[queuetail(q)].qkey  = MINKEY;
+	queuetab[queuetail(q)].qkey  = MAXKEY;
 	return q;
 }

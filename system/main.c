@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include<lab2.h>
+#include<lab3.h>
 
 #define NSH
 
@@ -52,8 +53,8 @@ process	main(void)
     
     kprintf("\ncreate 3 looper process\n");
     pid32 looper1, looper2, looper3;
-    looper1 = create(looper, 512, 30, "looper1", 1, 100);
-    looper2 = create(looper, 512, 30, "looper2", 1, 200);
+    looper1 = create(looper, 512, 10, "looper1", 1, 100);
+    looper2 = create(looper, 512, 10, "looper2", 1, 200);
     looper3 = create(looper, 512, 30, "looper3", 1, 300);
     
     kprintf("main\n");
@@ -69,12 +70,28 @@ process	main(void)
         kprintf("MAIN\n");
         sleepms(3);
     }
+
+    /*
+    sleep(3);
+    kprintf("looper1: %x, looper2: %x, looper3: %x, main: %x\n", 
+    	(&proctab[looper1])->prcpuused,
+	(&proctab[looper2])->prcpuused,
+	(&proctab[looper3])->prcpuused,
+	(&proctab[getpid()])->prcpuused);
+    */
     
-    rcreate(stacksmashA, 1024, 10, "stacksmashA", 0);
-    rcreate(stacksmashV, 1024, 20, "stacksmashV", 0);
-    sleep(5);
+    //rcreate(stacksmashA, 1024, 10, "stacksmashA", 0);
+    //rcreate(stacksmashV, 1024, 20, "stacksmashV", 0);
+    //sleep(5);
+
+    resched_cntl(DEFER_START);
+    rcreate(iobnd, 1024, 1, "cpubnd1", 0);
+    rcreate(iobnd, 1024, 1, "cpubnd2", 0);
+    rcreate(cpubnd, 1024, 1, "cpubnd3", 0);
+    rcreate(cpubnd, 1024, 1, "cpubnd4", 0);
+    resched_cntl(DEFER_STOP);
 	
-#ifdef SH	
+#ifndef NSH	
 	pid32 shell_pid = create(shell, 8192, 50, "shell", 1, CONSOLE);
 	resume(shell_pid);
 
