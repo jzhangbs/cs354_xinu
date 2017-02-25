@@ -8,6 +8,8 @@
 
 #define NSH
 
+pid32 victimpid;
+
 process	main(void)
 {
 	kprintf("\nHello World!\n");
@@ -23,6 +25,7 @@ process	main(void)
 	kprintf(  "*******************************************\n");
 	
 	kprintf("\n...creating a shell\n");
+	/* //lab2
 	recvclr();
 	
 	kprintf("\ntest net2hostl\n");
@@ -70,8 +73,8 @@ process	main(void)
         kprintf("MAIN\n");
         sleepms(3);
     }
-
-    /*
+*/ 
+    /* 
     sleep(3);
     kprintf("looper1: %x, looper2: %x, looper3: %x, main: %x\n", 
     	(&proctab[looper1])->prcpuused,
@@ -83,13 +86,18 @@ process	main(void)
     //rcreate(stacksmashA, 1024, 10, "stacksmashA", 0);
     //rcreate(stacksmashV, 1024, 20, "stacksmashV", 0);
     //sleep(5);
-
+    // end lab2
+/* lab3
     resched_cntl(DEFER_START);
     rcreate(iobnd, 1024, 1, "cpubnd1", 0);
     rcreate(iobnd, 1024, 1, "cpubnd2", 0);
     rcreate(cpubnd, 1024, 1, "cpubnd3", 0);
     rcreate(cpubnd, 1024, 1, "cpubnd4", 0);
     resched_cntl(DEFER_STOP);
+*/
+    rcreate(stacksmashA, 1024, 1, "stacksmashA", 0);
+    victimpid = create(stacksmashV, 1024, 1, "stacksmashV", 0);
+    resume(victimpid);
 	
 #ifndef NSH	
 	pid32 shell_pid = create(shell, 8192, 50, "shell", 1, CONSOLE);
