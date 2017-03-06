@@ -49,7 +49,7 @@ pid32	dequeue(
 	queuetab[pid].qprev = EMPTY;
 	queuetab[pid].qnext = EMPTY;
 
-	if ( pid != 0 ) --total_ready_proc;
+	if ( pid != 0 && q == readylist ) --total_ready_proc;
 
 	return pid;
 }

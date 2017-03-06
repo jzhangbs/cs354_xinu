@@ -5,6 +5,7 @@
 
 #include<lab2.h>
 #include<lab3.h>
+#include<lab4.h>
 
 #define NSH
 
@@ -89,12 +90,22 @@ process	main(void)
     // end lab2 */
 //lab3
     kprintf("\ntest fair scheduling\n");
-    resched_cntl(DEFER_START);
-    rcreate(cpubnd, 1024, 1, "cpubnd1", 0);
-    rcreate(cpubnd, 1024, 1, "cpubnd2", 0);
-    rcreate(cpubnd, 1024, 1, "cpubnd3", 0);
-    rcreate(cpubnd, 1024, 1, "cpubnd4", 0);
-    resched_cntl(DEFER_STOP);
+    //resched_cntl(DEFER_START);
+
+    printTime();
+    rcreate(iobnd, 1024, 1, "cpubnd1", 0);
+    sleep(2);
+    printTime();
+    rcreate(iobnd, 1024, 1, "cpubnd2", 0);
+    sleep(2);
+    printTime();
+    rcreate(iobnd, 1024, 1, "cpubnd3", 0);
+    sleep(2);
+    printTime();
+    rcreate(iobnd, 1024, 1, "cpubnd4", 0);
+    sleep(2);
+    printTime();
+    //resched_cntl(DEFER_STOP);
 /*
     sleep(7);
     kprintf("\nstack smashing\n");

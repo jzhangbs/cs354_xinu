@@ -24,6 +24,10 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 	ptold = &proctab[currpid];
 
+	if (ptold->prstate != PR_CURR) {
+		total_cpu_usage -= ptold->prcpuused;
+	}
+
 	if (ptold->prstate == PR_CURR) {  /* Process remains eligible */
 		if (ptold->prcpuused < firstkey(readylist)) {
 			return;
@@ -33,10 +37,6 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 		ptold->prstate = PR_READY;
 		insert(currpid, readylist, ptold->prcpuused);
-	}
-
-	if (ptold->prstate != PR_CURR) {
-		total_cpu_usage -= ptold->prcpuused;
 	}
 
 	/* Force context switch to highest priority ready process */

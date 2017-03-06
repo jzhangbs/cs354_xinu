@@ -1,7 +1,7 @@
 
 #include <xinu.h>
 
-#define LOOP1 20
+#define LOOP1 200
 #define LOOP2 100
 
 void iobnd() {

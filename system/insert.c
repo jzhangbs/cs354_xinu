@@ -33,7 +33,7 @@ status	insert(
 	queuetab[prev].qnext = pid;
 	queuetab[curr].qprev = pid;
 
-	if ( pid != 0 ) {
+	if ( pid != 0 && q == readylist ) {
 	    ++total_ready_proc;
 	}
 

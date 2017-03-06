@@ -1,3 +1,5 @@
+#ifndef _LAB2_H_
+#define _LAB2_H_
 /* net2hostl decl for lab2 */
 long net2hostl   (long x);
 long net2hostlgcc(long x);
@@ -10,3 +12,4 @@ int func1();
 void looper(int);
 void stacksmashA();
 void stacksmashV();
+#endif
