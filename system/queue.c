@@ -48,5 +48,8 @@ pid32	dequeue(
 	pid = getfirst(q);
 	queuetab[pid].qprev = EMPTY;
 	queuetab[pid].qnext = EMPTY;
+
+	if ( pid != 0 ) --total_ready_proc;
+
 	return pid;
 }

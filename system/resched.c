@@ -35,6 +35,10 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 		insert(currpid, readylist, ptold->prcpuused);
 	}
 
+	if (ptold->prstate != PR_CURR) {
+		total_cpu_usage -= ptold->prcpuused;
+	}
+
 	/* Force context switch to highest priority ready process */
 
 	currpid = dequeue(readylist);
@@ -42,11 +46,11 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	ptnew->prstate = PR_CURR;
 	preempt = QUANTUM;		/* Reset time slice for process	*/
 	
-	uint32 add_time = timediff(ptold->prctxswstart, clktimefine);
+/*	uint32 add_time = timediff(ptold->prctxswstart, clktimefine);
 	uint32 rest = 0xFFFFFFFE - ptold->prcpuused;
 	if (rest < add_time) ptold->prcpuused = 0xFFFFFFFE;
 	else ptold->prcpuused += add_time;
-	ptnew->prctxswstart = clktimefine;
+*/	ptnew->prctxswstart = clktimefine;
 	
 	//kprintf("switch %x\n", currpid);
 	ctxsw(&ptold->prstkptr, &ptnew->prstkptr);

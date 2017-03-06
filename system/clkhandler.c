@@ -14,6 +14,10 @@ void	clkhandler()
 	if (clktimefine == 0xFFFFFFFF) clktimefine = 0;
 	else ++clktimefine;
 
+	if (currpid != 0) {
+		++total_cpu_usage;
+		++(proctab[currpid].prcpuused);
+	}
 
 	/* Decrement the ms counter, and see if a second has passed */
 

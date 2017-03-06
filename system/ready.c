@@ -21,7 +21,11 @@ status	ready(
 	/* Set process state to indicate ready and add to ready list */
 
 	prptr = &proctab[pid];
-	prptr->prstate = PR_READY;
+
+	if (pid != 0 && prptr->prstate != PR_CURR)
+	    total_cpu_usage += prptr->prcpuused;
+
+	prptr->prstate = PR_READY;	
 	insert(pid, readylist, prptr->prcpuused);
 	resched();
 
