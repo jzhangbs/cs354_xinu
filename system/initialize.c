@@ -138,7 +138,7 @@ static	void	sysinit()
 		prptr->prname[0] = NULLCH;
 		prptr->prstkbase = NULL;
 		prptr->prprio = 0;
-		prptr->prcpuused = 0xfffffffe;
+		prptr->prcpuused = 0x7ffffffe;
 	}
 
 	/* Initialize the Null process entry */	
@@ -154,6 +154,7 @@ static	void	sysinit()
 
 	total_cpu_usage = 1;
 	total_ready_proc = 0;
+	prptr->rlpos = NIL;
 	
 	/* Initialize semaphores */
 
@@ -171,6 +172,7 @@ static	void	sysinit()
 	/* Create a ready list for processes */
 
 	readylist = newqueue();
+	newheap();
 
 	/* Initialize the real time clock */
 

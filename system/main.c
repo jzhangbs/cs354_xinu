@@ -3,10 +3,6 @@
 #include <xinu.h>
 #include <stdio.h>
 
-#include<lab2.h>
-#include<lab3.h>
-#include<lab4.h>
-
 #define NSH
 
 pid32 victimpid;
@@ -93,16 +89,16 @@ process	main(void)
     //resched_cntl(DEFER_START);
 
     printTime();
-    rcreate(iobnd, 1024, 1, "cpubnd1", 0);
+    rcreate(cpubnd, 1024, 1, "cpubnd1", 0);
     sleep(2);
     printTime();
-    rcreate(iobnd, 1024, 1, "cpubnd2", 0);
+    rcreate(cpubnd, 1024, 1, "cpubnd2", 0);
     sleep(2);
     printTime();
-    rcreate(iobnd, 1024, 1, "cpubnd3", 0);
+    rcreate(cpubnd, 1024, 1, "cpubnd3", 0);
     sleep(2);
     printTime();
-    rcreate(iobnd, 1024, 1, "cpubnd4", 0);
+    rcreate(cpubnd, 1024, 1, "cpubnd4", 0);
     sleep(2);
     printTime();
     //resched_cntl(DEFER_STOP);
