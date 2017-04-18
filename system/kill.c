@@ -47,7 +47,7 @@ syscall	kill(
 		/* Fall through */
 
 	case PR_READY:
-		heapgetitem(pid);		/* Remove from queue */
+		getitem(pid);		/* Remove from queue */
 		/* Fall through */
 
 	default:

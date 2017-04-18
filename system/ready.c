@@ -26,7 +26,7 @@ status	ready(
 	    total_cpu_usage += prptr->prcpuused;
 
 	prptr->prstate = PR_READY;	
-	heapinsert(pid, prptr->prcpuused);
+	insert(pid, readylist, prptr->prcpuused);
 	resched();
 
 	return OK;

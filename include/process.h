@@ -1,8 +1,6 @@
 /* process.h - isbadpid */
 
 /* Maximum number of processes in the system */
-#ifndef _PROCESS_H_
-#define _PROCESS_H_
 
 #ifndef NPROC
 #define	NPROC		8
@@ -57,8 +55,6 @@ struct procent {		/* Entry in the process table		*/
 
 	uint32	prcpuused;	/* Time using cpu			*/
 	uint32	prctxswstart;	/* Time switched in			*/
-
-	int32	rlpos;
 };
 
 /* Marker for the top of a process stack (used to help detect overflow)	*/
@@ -70,5 +66,3 @@ extern	pid32	currpid;	/* Currently executing process		*/
 
 extern	uint32	total_cpu_usage;
 extern	uint32	total_ready_proc;
-
-#endif

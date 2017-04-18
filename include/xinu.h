@@ -41,8 +41,4 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <minheap.h>
-
-#include <lab2.h>
-#include <lab3.h>
 #include <lab4.h>

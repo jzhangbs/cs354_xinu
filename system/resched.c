@@ -24,26 +24,24 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 	ptold = &proctab[currpid];
 
-	//printheap();
-
 	if (ptold->prstate != PR_CURR) {
 		total_cpu_usage -= ptold->prcpuused;
 	}
 
 	if (ptold->prstate == PR_CURR) {  /* Process remains eligible */
-		if (ptold->prcpuused < heapminkey()) {
+		if (ptold->prcpuused < firstkey(readylist)) {
 			return;
 		}
 
 		/* Old process will no longer remain current */
 
 		ptold->prstate = PR_READY;
-		heapinsert(currpid, ptold->prcpuused);
+		insert(currpid, readylist, ptold->prcpuused);
 	}
 
 	/* Force context switch to highest priority ready process */
 
-	currpid = heapgethead();
+	currpid = dequeue(readylist);
 	ptnew = &proctab[currpid];
 	ptnew->prstate = PR_CURR;
 	preempt = QUANTUM;		/* Reset time slice for process	*/
