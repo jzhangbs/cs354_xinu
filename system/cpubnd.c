@@ -1,7 +1,7 @@
 #include <xinu.h>
 
 #define LOOP1 150
-#define LOOP2 5000000
+#define LOOP2 500000
 
 void cpubnd() {
     int i,j,tmp=0;
