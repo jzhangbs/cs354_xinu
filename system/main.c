@@ -25,7 +25,7 @@ process	main(void)
 	kprintf(  "*******************************************\n");
 	
 	kprintf("\n...creating a shell\n");
-	/* //lab2
+	 //lab2
 	recvclr();
 	
 	kprintf("\ntest net2hostl\n");
@@ -86,22 +86,22 @@ process	main(void)
     //rcreate(stacksmashA, 1024, 10, "stacksmashA", 0);
     //rcreate(stacksmashV, 1024, 20, "stacksmashV", 0);
     //sleep(5);
-    // end lab2 */
+    // end lab2
 //lab3
     kprintf("\ntest fair scheduling\n");
     resched_cntl(DEFER_START);
-    rcreate(cpubnd, 1024, 1, "cpubnd1", 0);
-    rcreate(cpubnd, 1024, 1, "cpubnd2", 0);
+    rcreate(iobnd, 1024, 1, "cpubnd1", 0);
+    rcreate(iobnd, 1024, 1, "cpubnd2", 0);
     rcreate(cpubnd, 1024, 1, "cpubnd3", 0);
     rcreate(cpubnd, 1024, 1, "cpubnd4", 0);
     resched_cntl(DEFER_STOP);
-/*
+
     sleep(7);
     kprintf("\nstack smashing\n");
     rcreate(stacksmashA, 1024, 1, "stacksmashA", 0);
     victimpid = create(stacksmashV, 1024, 1, "stacksmashV", 0);
     resume(victimpid);
-*/	
+	
 #ifndef NSH	
 	pid32 shell_pid = create(shell, 8192, 50, "shell", 1, CONSOLE);
 	resume(shell_pid);

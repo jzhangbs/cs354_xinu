@@ -28,9 +28,6 @@ struct	memblk	memlist;	/* List of free memory blocks		*/
 int	prcount;		/* Total number of live processes	*/
 pid32	currpid;		/* ID of currently executing process	*/
 
-uint32	total_cpu_usage;
-uint32	total_ready_proc;
-
 /*------------------------------------------------------------------------
  * nulluser - initialize the system and become the null process
  *
@@ -151,9 +148,6 @@ static	void	sysinit()
 	prptr->prstklen = NULLSTK;
 	prptr->prstkptr = 0;
 	currpid = NULLPROC;
-
-	total_cpu_usage = 1;
-	total_ready_proc = 0;
 	
 	/* Initialize semaphores */
 

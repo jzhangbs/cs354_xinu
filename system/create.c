@@ -47,7 +47,7 @@ pid32	create(
 	prptr->prstkbase = (char *)saddr;
 	prptr->prstklen = ssize;
 	prptr->prname[PNMLEN-1] = NULLCH;
-	prptr->prcpuused = total_cpu_usage / (total_ready_proc + 1);
+	prptr->prcpuused = 1;
 
 	for (i=0 ; i<PNMLEN-1 && (prptr->prname[i]=name[i])!=NULLCH; i++)
 		;

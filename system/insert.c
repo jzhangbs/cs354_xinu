@@ -32,10 +32,5 @@ status	insert(
 	queuetab[pid].qkey = key;
 	queuetab[prev].qnext = pid;
 	queuetab[curr].qprev = pid;
-
-	if ( pid != 0 ) {
-	    ++total_ready_proc;
-	}
-
 	return OK;
 }
