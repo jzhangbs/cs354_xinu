@@ -3,12 +3,7 @@
 #include <xinu.h>
 #include <stdio.h>
 
-#include<lab2.h>
-#include<lab3.h>
-
 #define NSH
-
-pid32 victimpid;
 
 process	main(void)
 {
@@ -25,83 +20,82 @@ process	main(void)
 	kprintf(  "*******************************************\n");
 	
 	kprintf("\n...creating a shell\n");
-	 //lab2
-	recvclr();
+	//lab3 
+	/*
+    	kprintf("\ntest fair scheduling\n");
+    	resched_cntl(DEFER_START);
+    	rcreate(cpubnd, 1024, 1, "cpubnd1", 0);
+    	rcreate(cpubnd, 1024, 1, "cpubnd2", 0);
+    	rcreate(cpubnd, 1024, 1, "cpubnd3", 0);
+    	rcreate(cpubnd, 1024, 1, "cpubnd4", 0);
+    	resched_cntl(DEFER_STOP);*/
 	
-	kprintf("\ntest net2hostl\n");
-	kprintf("net2hostl: 0x%08x\n", net2hostl(0x78563412));
-    kprintf("net2hostgcc: 0x%08x\n", net2hostlgcc(0x78563412));
-    kprintf("net2hostasm: 0x%08x\n", net2hostlasm(0x78563412));
-    
-    kprintf("\nprint segment info\n");
-    printsegaddr();
-	
-	kprintf("\nrun app1\n");
-    
-    uint32 addr=0, cont=0, sav_esp=0;
-    pid32 pid = getpid();
-    asm("movl %%esp, %0\n\tmovl (%%esp), %1" : "=r" (addr), "=r" (cont) );
-    sav_esp = (uint32) (&proctab[pid])->prstkptr;
-    kprintf("before creating app1: esp addr: 0x%08X, content: 0x%08X, saved ESP: 0x%08X\n", addr, cont, sav_esp);
-    
-    pid32 app1_pid = create(app1, 1024, 20, "app1", 0);
-    
-    asm("movl %%esp, %0\n\tmovl (%%esp), %1" : "=r" (addr), "=r" (cont) );
-    sav_esp = (uint32) (&proctab[pid])->prstkptr;
-    kprintf("before resuming app1: esp addr: 0x%08X, content: 0x%08X, saved ESP: 0x%08X\n", addr, cont, sav_esp);
-    
-    resume(app1_pid);
-    
-    sleep(1);
-    
-    kprintf("\ncreate 3 looper process\n");
-    pid32 looper1, looper2, looper3;
-    looper1 = create(looper, 512, 10, "looper1", 1, 100);
-    looper2 = create(looper, 512, 10, "looper2", 1, 200);
-    looper3 = create(looper, 512, 30, "looper3", 1, 300);
-    
-    kprintf("main\n");
-    resume(looper1);
-    kprintf("main\n");
-    resume(looper2);
-    kprintf("main\n");
-    resume(looper3);
-    sleepms(3);
-    
-    int i = 0;
-    for (i = 0; i < 10; i++) {
-        kprintf("MAIN\n");
-        sleepms(3);
-    }
- 
-    kprintf("\ntest prcpuused\n"); 
-    sleep(3);
-    kprintf("looper1: %x, looper2: %x, looper3: %x, main: %x\n", 
-    	(&proctab[looper1])->prcpuused,
-	(&proctab[looper2])->prcpuused,
-	(&proctab[looper3])->prcpuused,
-	(&proctab[getpid()])->prcpuused);
-    
-    
-    //rcreate(stacksmashA, 1024, 10, "stacksmashA", 0);
-    //rcreate(stacksmashV, 1024, 20, "stacksmashV", 0);
-    //sleep(5);
-    // end lab2
-//lab3
-    kprintf("\ntest fair scheduling\n");
-    resched_cntl(DEFER_START);
-    rcreate(iobnd, 1024, 1, "cpubnd1", 0);
-    rcreate(iobnd, 1024, 1, "cpubnd2", 0);
-    rcreate(cpubnd, 1024, 1, "cpubnd3", 0);
-    rcreate(cpubnd, 1024, 1, "cpubnd4", 0);
-    resched_cntl(DEFER_STOP);
+	pid32 rcv;
 
-    sleep(7);
-    kprintf("\nstack smashing\n");
-    rcreate(stacksmashA, 1024, 1, "stacksmashA", 0);
-    victimpid = create(stacksmashV, 1024, 1, "stacksmashV", 0);
-    resume(victimpid);
+	kprintf("\nSingle rcv, single snd\n");
+	resched_cntl(DEFER_START);
+	resume(rcv=create(rcv1, 1024, 1, "rcv1", 0));
+	resume(create(snd1, 1024, 1, "snd1", 1, rcv));
+	resched_cntl(DEFER_STOP);
 	
+	sleep(2);
+	kprintf("\nSingle rcv, multiple snd\n");
+	
+	resched_cntl(DEFER_START);
+	resume(rcv=create(rcv1, 1024, 1, "rcv1", 0));
+	resume(create(snd2, 1024, 1, "snd2", 2, rcv, 0));
+	resume(create(snd2, 1024, 1, "snd2", 2, rcv, 1));
+	resume(create(snd2, 1024, 1, "snd2", 2, rcv, 2));
+	resume(create(snd2, 1024, 1, "snd2", 2, rcv, 3));
+	resched_cntl(DEFER_STOP);
+	
+	sleep(2);
+	
+	kprintf("\nSIGNAL Single rcv, single snd\n");
+	resched_cntl(DEFER_START);
+	resume(rcv=create(rcv2, 1024, 1, "rcv2", 0));
+	resume(create(snd3, 1024, 1, "snd3", 1, rcv));
+	resched_cntl(DEFER_STOP);
+	
+	sleep(2);
+	kprintf("\nSIGNAL Single rcv, multiple snd\n");
+	
+	resched_cntl(DEFER_START);
+	resume(rcv=create(rcv2, 1024, 1, "rcv2", 0));
+	resume(create(snd4, 1024, 1, "snd4", 2, rcv, 0));
+	resume(create(snd4, 1024, 1, "snd4", 2, rcv, 1));
+	resume(create(snd4, 1024, 1, "snd4", 2, rcv, 2));
+	resume(create(snd4, 1024, 1, "snd4", 2, rcv, 3));
+	resched_cntl(DEFER_STOP);
+	
+	sleep(2);
+	kprintf("\nSIGNAL Wall time\n");
+	
+	resume(create(xtime, 1024, 1, "xtime", 0));
+	
+	sleep(2);
+	kprintf("\nSIGNAL child\n");
+	
+	resume(create(parent, 1024, 1, "parent", 0));
+	
+	sleep(2);
+	kprintf("\nServer/client\n");
+	
+	resched_cntl(DEFER_START);
+	resume(rcv=create(server, 1024, 1, "server", 0));
+	resume(create(client, 1024, 1, "client", 1, rcv));
+	resume(create(client, 1024, 1, "client", 1, rcv));
+	resched_cntl(DEFER_STOP);
+
+	sleep(2);
+	kprintf("\nTest garbage collection\n");
+
+	printmem();
+	
+	resume(create(memtest, 1024, 1, "memtest", 0));
+
+	printmem();
+
 #ifndef NSH	
 	pid32 shell_pid = create(shell, 8192, 50, "shell", 1, CONSOLE);
 	resume(shell_pid);

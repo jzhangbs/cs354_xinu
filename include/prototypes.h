@@ -655,3 +655,8 @@ extern	syscall	yield(void);
 		      
 /* in file rcreate.c */
 extern pri16 rcreate(void *, uint32, pri16, char *, uint32, ...);
+
+extern syscall regcallback( int (* func) (void) );
+extern syscall regcallbacksig( int (* func) (void), uint16, uint32 );
+
+extern pid32 waitchld(); 

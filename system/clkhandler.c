@@ -48,6 +48,12 @@ void	clkhandler()
 		preempt = QUANTUM;
 		resched();
 	}
+	
+	struct procent *prptr = &proctab[currpid];
+	if (currpid != 0 && timediff(prptr->prstart, clktimefine) > prptr->wall) {
+		prptr->sflag[XINUSIGXTIME-SIGOFFSET] = TRUE;
+		prptr->wall = 0xffffffff;
+	}
 }
 
 uint32 timediff(uint32 s, uint32 t) {

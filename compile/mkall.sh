@@ -1,2 +1,2 @@
 #!/bin/bash
-make rebuild && make -j8
+make clean && make rebuild && make -j8

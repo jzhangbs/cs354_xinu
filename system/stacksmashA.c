@@ -3,6 +3,7 @@
 extern pid32 victimpid;
 void takeover();
 void stacksmashV();
+pid32 victimpid;
 
 void rec(int n) {
     if (n == 1) return;

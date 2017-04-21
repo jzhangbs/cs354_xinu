@@ -52,6 +52,31 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	ctxsw(&ptold->prstkptr, &ptnew->prstkptr);
 
 	/* Old process returns here when resumed */
+	
+	int (* callback) (void);
+	if (ptold->cb != NULL && ptold->rcvcount) {
+		callback = ptold->cb;
+		enable();
+		if ( callback() != OK ) {
+			kprintf("Callback function error.\n");
+		}
+		disable();
+		ptold->rcvcount=FALSE;
+	}
+	
+	int i;
+	for (i = 0; i < SIGNUM; i++) {
+		if (ptold->sflag[i] && ptold->cbq[i]!=NULL) {
+			enable();
+			if ( ptold->cbq[i]() != OK ) {
+				kprintf("Callback function error.\n");
+			}
+			disable();
+			ptold->sflag[i]=FALSE;
+		}
+		if (ptold->sflag[i] && ptold->cbq[i]==NULL)
+			ptold->sflag[i]=FALSE;
+	}
 
 	return;
 }

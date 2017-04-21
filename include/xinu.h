@@ -1,7 +1,9 @@
 /* xinu.h - include all system header files */
 
+#include <xinu_signal.h>
 #include <kernel.h>
 #include <conf.h>
+#include <memrec.h>
 #include <process.h>
 #include <queue.h>
 #include <resched.h>
@@ -40,3 +42,5 @@
 #include <multiboot.h>
 #include <stdio.h>
 #include <string.h>
+
+#include <lab6.h>

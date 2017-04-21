@@ -49,6 +49,19 @@ pid32	create(
 	prptr->prname[PNMLEN-1] = NULLCH;
 	prptr->prcpuused = 1;
 
+	prptr->rcvcount = FALSE;
+	prptr->cb = NULL;
+	
+	int sigiter;
+	for (sigiter = 0; sigiter < SIGNUM; sigiter++) {
+		prptr->sflag[sigiter] = FALSE;
+		prptr->cbq[sigiter] = NULL;
+	}
+	prptr->wall = 0xffffffff;
+	prptr->prstart = clktimefine;
+
+	prptr->memtop = 0;
+
 	for (i=0 ; i<PNMLEN-1 && (prptr->prname[i]=name[i])!=NULLCH; i++)
 		;
 	prptr->prsem = -1;

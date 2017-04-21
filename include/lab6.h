@@ -1,0 +1,13 @@
+process rcv1();
+process snd1(pid32);
+process snd2(pid32, umsg32);
+process rcv2();
+process snd3(pid32);
+process snd4(pid32, umsg32);
+process xtime();
+process parent();
+process child();
+process server();
+process client(pid32);
+process worker();
+process memtest();

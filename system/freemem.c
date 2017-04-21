@@ -65,6 +65,10 @@ syscall	freemem(
 		block->mlength += next->mlength;
 		block->mnext = next->mnext;
 	}
+
+	memrec newm = {(uint32)blkaddr, nbytes};
+	memsub( newm );
+
 	restore(mask);
 	return OK;
 }

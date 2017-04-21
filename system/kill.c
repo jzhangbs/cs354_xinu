@@ -25,7 +25,17 @@ syscall	kill(
 		xdone();
 	}
 
-	send(prptr->prparent, pid);
+	//send(prptr->prparent, pid);
+	proctab[prptr->prparent].sflag[XINUSIGCHLD-SIGOFFSET] = TRUE;
+	if (proctab[prptr->prparent].prstate==PR_WAITFORCHLD) {
+		proctab[prptr->prparent].termchldpid = pid;
+		ready(prptr->prparent);
+	}
+
+	while( prptr->memtop > 0 ) {
+		freemem((char *)prptr->prmem[0].addr, prptr->prmem[0].len);
+	}
+	
 	for (i=0; i<3; i++) {
 		close(prptr->prdesc[i]);
 	}
